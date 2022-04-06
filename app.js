@@ -1,11 +1,12 @@
 const express = require("express"),
+  app = express(),
   path = require("path"),
   cookieParser = require("cookie-parser"),
   logger = require("morgan");
 
-const usersRouter = require("./app/api/v1/users/router"),
-  app = express(),
-  versionV1 = "/api/v1";
+const versionV1 = "/api/v1",
+  usersRouter = require("./app/api/v1/users/router"),
+  authRouter = require("./app/api/v1/auth/router");
 
 // Middleware
 const notFoundMiddleware = require("./app/middlewares/not-found"),
@@ -22,6 +23,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(`${versionV1}`, usersRouter);
+app.use(`${versionV1}/auth`, authRouter);
 // Middleware
 app.use(notFoundMiddleware);
 app.use(handlerError);
