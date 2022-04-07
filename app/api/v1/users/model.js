@@ -1,4 +1,5 @@
-const mongoose = require("mongoose");
+const mongoose = require("mongoose"),
+  bcrypt = require("bcryptjs");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -26,5 +27,44 @@ const UserSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+UserSchema.path("email").validate(
+  (value) => {
+    const EMAIL_RE = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
+    return EMAIL_RE.test(value);
+  },
+  (attr) => `${attr.value} harus merupakan email valid`
+);
+
+UserSchema.path("email").validate(
+  async function (value) {
+    try {
+      const count = await this.model("User").countDocuments({ email: value });
+      return !count;
+    } catch (err) {
+      throw err;
+    }
+  },
+  (attr) => `${attr.value} sudah terdaftar`
+);
+
+UserSchema.path("name").validate(
+  async function (value) {
+    try {
+      const count = await this.model("User").countDocuments({ name: value });
+      return !count;
+    } catch (err) {
+      throw err;
+    }
+  },
+  (attr) => `${attr.value} sudah digunakan`
+);
+
+UserSchema.pre("save", async function () {
+  // console.log(this.modifiedPaths());
+  // console.log(this.isModified("name"));
+  if (!this.isModified("password")) return;
+  this.password = await bcrypt.hash(this.password, 10);
+});
 
 module.exports = mongoose.model("User", UserSchema);
