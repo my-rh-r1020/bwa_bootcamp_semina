@@ -6,7 +6,8 @@ const express = require("express"),
 
 const versionV1 = "/api/v1",
   usersRouter = require("./app/api/v1/users/router"),
-  authRouter = require("./app/api/v1/auth/router");
+  authRouter = require("./app/api/v1/auth/router"),
+  categoriesRouter = require("./app/api/v1/categories/router");
 
 // Middleware
 const notFoundMiddleware = require("./app/middlewares/not-found"),
@@ -24,6 +25,7 @@ app.get("/", (req, res) => {
 
 app.use(`${versionV1}`, usersRouter);
 app.use(`${versionV1}/auth`, authRouter);
+app.use(`${versionV1}/categories`, categoriesRouter);
 // Middleware
 app.use(notFoundMiddleware);
 app.use(handlerError);
