@@ -4,7 +4,7 @@ const Category = require("./model"),
 
 const getAllCategory = async (req, res, next) => {
   try {
-    const result = await Category.find({});
+    const result = await Category.find({ user: req.user.id });
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
@@ -12,4 +12,17 @@ const getAllCategory = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllCategory };
+const createCategory = async (req, res, next) => {
+  try {
+    const { name } = req.body,
+      user = req.user.id;
+
+    const result = await Category.create({ name, user });
+
+    res.status(StatusCodes.CREATED).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAllCategory, createCategory };
