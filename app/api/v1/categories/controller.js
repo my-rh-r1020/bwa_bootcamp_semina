@@ -21,7 +21,7 @@ const createCategory = async (req, res, next) => {
 
     const check = await Category.findOne({ user, name });
 
-    if (check) throw new CustomAPIError.BadRequestError("Duplicate for name category!");
+    if (check) throw new CustomAPIError.BadRequestError("Duplicate name category!");
 
     const result = await Category.create({ name, user });
 
@@ -46,4 +46,40 @@ const getOneCategory = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllCategory, createCategory, getOneCategory };
+// Update a category by id
+const updateCategory = async (req, res, next) => {
+  try {
+    const { id: categoryId } = req.params,
+      { name } = req.body;
+
+    const check = await Category.findOne({ name, _id: { $ne: categoryId } });
+
+    if (check) throw new CustomAPIError.BadRequestError("Duplicate name category!");
+
+    const result = await Category.findOneAndUpdate({ _id: categoryId }, { name, user: req.user.id }, { new: true, runValidators: true });
+
+    if (!result) throw new CustomAPIError.NotFoundError(`Data not found for id ${categoryId}`);
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Delete a category by id
+const deleteCategory = async (req, res, next) => {
+  try {
+    const { id: categoryId } = req.params;
+
+    const result = await Category.findOne({ _id: categoryId });
+
+    if (!result) throw new CustomAPIError.NotFoundError(`Data not found for id ${categoryId}`);
+
+    await result.remove();
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAllCategory, createCategory, getOneCategory, updateCategory, deleteCategory };
