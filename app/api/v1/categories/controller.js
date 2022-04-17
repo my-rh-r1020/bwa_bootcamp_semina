@@ -71,11 +71,12 @@ const deleteCategory = async (req, res, next) => {
   try {
     const { id: categoryId } = req.params;
 
-    const result = await Category.findOne({ _id: categoryId });
+    // const result = await Category.findOne({ _id: categoryId });
+    const result = await Category.findOneAndDelete({ _id: categoryId });
 
     if (!result) throw new CustomAPIError.NotFoundError(`Data not found for id ${categoryId}`);
 
-    await result.remove();
+    // await result.remove();
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
     next(err);
