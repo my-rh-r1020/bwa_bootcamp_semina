@@ -2,7 +2,7 @@ const Category = require("./model"),
   { StatusCodes } = require("http-status-codes"),
   CustomAPIError = require("../../../errors");
 
-// Get all categoriess
+// Get all data categories
 const getAllCategory = async (req, res, next) => {
   try {
     const result = await Category.find({ user: req.user.id });
