@@ -11,7 +11,7 @@ const SpeakerSchema = new mongoose.Schema(
     avatar: {
       type: String,
       required: true,
-      default: "/uploads/default.png",
+      default: "default.png",
     },
     role: {
       type: String,

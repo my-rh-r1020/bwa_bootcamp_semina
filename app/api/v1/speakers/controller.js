@@ -21,18 +21,10 @@ const createSpeaker = async (req, res, next) => {
 
     let result;
 
-    // const check = await getAllSpeakers({ user });
-    // const check = await Speaker.find({ user: req.user.id });
-
-    // if (check) throw new CustomAPIError.BadRequestError("Duplicate name speaker!");
-
-    // const result = await Speaker.create({ name, user });
-
-    console.log("req.file >>", req.file);
-
     if (!req.file) {
-      // throw new CustomAPIError.BadRequestError("Please upload a file!");
+      result = await Speaker({ name, role, user }).save();
     } else {
+      result = await Speaker({ name, role, avatar: req.file.filename, user }).save();
     }
 
     res.status(StatusCodes.CREATED).json({ data: result });
@@ -41,4 +33,19 @@ const createSpeaker = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllSpeakers, createSpeaker };
+// Get a data speaker by id
+const getOneSpeaker = async (req, res, next) => {
+  try {
+    const { id: SpeakerId } = req.params;
+
+    const result = await Speaker.findOne({ _id: SpeakerId, user: req.user.id });
+
+    if (!result) throw new CustomAPIError.NotFoundError(`Speaker id ${SpeakerId} is not found!`);
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAllSpeakers, createSpeaker, getOneSpeaker };
