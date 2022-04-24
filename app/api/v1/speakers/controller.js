@@ -1,6 +1,7 @@
 const Speaker = require("./model"),
   { StatusCodes } = require("http-status-codes"),
-  CustomAPIError = require("../../../errors");
+  CustomAPIError = require("../../../errors"),
+  fs = require("fs");
 
 // Get all data speakers
 const getAllSpeakers = async (req, res, next) => {
@@ -48,4 +49,32 @@ const getOneSpeaker = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllSpeakers, createSpeaker, getOneSpeaker };
+// Update a data speaker by id
+const updateSpeaker = async (req, res, next) => {
+  try {
+    const { name, role } = req.body,
+      { id: SpeakerId } = req.params,
+      user = req.user.id;
+
+    let result = await Speaker.findOne({ _id: SpeakerId, user });
+
+    if (!result) throw new CustomAPIError.NotFoundError(`Speaker id ${SpeakerId} is not found!`);
+
+    if (!req.file) {
+      result.name = name;
+      result.role = role;
+    } else {
+      let currentImage = `${config.rootPath}/public${result.avatar}`;
+
+      if (result.avatar !== "uploads/default.png" && fs.unlinkSync(currentImage)) {
+        fs.unlinkSync(currentImage);
+      }
+    }
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAllSpeakers, createSpeaker, getOneSpeaker, updateSpeaker };
