@@ -1,7 +1,8 @@
 const Speaker = require("./model"),
   { StatusCodes } = require("http-status-codes"),
   CustomAPIError = require("../../../errors"),
-  fs = require("fs");
+  fs = require("fs"),
+  config = require("../../../config");
 
 // Get all data speakers
 const getAllSpeakers = async (req, res, next) => {
@@ -64,7 +65,7 @@ const updateSpeaker = async (req, res, next) => {
       result.name = name;
       result.role = role;
     } else {
-      let currentImage = `${config.rootPath}/public${result.avatar}`;
+      let currentImage = `${config.rootPath}/public/uploads/${result.avatar}`;
 
       if (result.avatar !== "uploads/default.png" && fs.unlinkSync(currentImage)) {
         fs.unlinkSync(currentImage);
