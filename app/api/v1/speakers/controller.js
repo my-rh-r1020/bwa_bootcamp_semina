@@ -1,3 +1,4 @@
+const { findOne } = require("./model");
 const Speaker = require("./model"),
   { StatusCodes } = require("http-status-codes"),
   CustomAPIError = require("../../../errors"),
@@ -67,10 +68,16 @@ const updateSpeaker = async (req, res, next) => {
     } else {
       let currentImage = `${config.rootPath}/public/uploads/${result.avatar}`;
 
-      if (result.avatar !== "uploads/default.png" && fs.unlinkSync(currentImage)) {
+      if (result.avatar !== "default.png" && fs.existsSync(currentImage)) {
         fs.unlinkSync(currentImage);
       }
+
+      result.name = name;
+      result.role = role;
+      result.avatar = req.file.filename;
     }
+
+    await result.save();
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
@@ -78,4 +85,28 @@ const updateSpeaker = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllSpeakers, createSpeaker, getOneSpeaker, updateSpeaker };
+// Delete a data speaker by id
+const deleteSpeaker = async (req, res, next) => {
+  try {
+    const { id: SpeakerId } = req.params,
+      user = req.user.id;
+
+    let result = await Speaker.findOne({ _id: SpeakerId, user });
+
+    if (!result) throw new CustomAPIError.NotFoundError(`Speaker id ${SpeakerId} is not found!`);
+
+    let currentImage = `${config.rootPath}/public/uploads/${result.avatar}`;
+
+    if (result.avatar !== "default.png" && fs.existsSync(currentImage)) {
+      fs.unlinkSync(currentImage);
+    }
+
+    await result.remove();
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAllSpeakers, createSpeaker, getOneSpeaker, updateSpeaker, deleteSpeaker };
