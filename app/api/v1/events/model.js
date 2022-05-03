@@ -34,7 +34,7 @@ const EventSchema = new mongoose.Schema(
     },
     keypoint: {
       type: [String],
-      required: [true, "Please provide keypoint!"],
+      // required: [true, "Please provide keypoint!"],
     },
     category: {
       type: mongoose.Types.ObjectId,
@@ -44,6 +44,11 @@ const EventSchema = new mongoose.Schema(
     speaker: {
       type: mongoose.Types.ObjectId,
       ref: "Speaker",
+      required: true,
+    },
+    user: {
+      type: mongoose.Types.ObjectId,
+      ref: "User",
       required: true,
     },
   },

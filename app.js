@@ -9,7 +9,8 @@ const versionV1 = "/api/v1",
   usersRouter = require("./app/api/v1/users/router"),
   authRouter = require("./app/api/v1/auth/router"),
   categoriesRouter = require("./app/api/v1/categories/router"),
-  speakerRouter = require("./app/api/v1/speakers/router");
+  speakerRouter = require("./app/api/v1/speakers/router"),
+  eventRouter = require("./app/api/v1/events/router");
 
 // Middleware
 const notFoundMiddleware = require("./app/middlewares/not-found"),
@@ -29,6 +30,7 @@ app.use(`${versionV1}`, usersRouter);
 app.use(`${versionV1}/auth`, authRouter);
 app.use(`${versionV1}/categories`, categoriesRouter);
 app.use(`${versionV1}/speakers`, speakerRouter);
+app.use(`${versionV1}/events`, eventRouter);
 
 // Middleware
 app.use(notFoundMiddleware);

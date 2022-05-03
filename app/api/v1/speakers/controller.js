@@ -7,7 +7,7 @@ const Speaker = require("./model"),
 // Get all data speakers
 const getAllSpeakers = async (req, res, next) => {
   try {
-    // Filter speakers name
+    // Filter speakers by name
     const { keyword } = req.query;
 
     let condition = { user: req.user.id };
