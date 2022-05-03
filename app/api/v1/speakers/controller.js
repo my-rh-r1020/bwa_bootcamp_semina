@@ -1,4 +1,3 @@
-const { findOne } = require("./model");
 const Speaker = require("./model"),
   { StatusCodes } = require("http-status-codes"),
   CustomAPIError = require("../../../errors"),
@@ -8,7 +7,17 @@ const Speaker = require("./model"),
 // Get all data speakers
 const getAllSpeakers = async (req, res, next) => {
   try {
-    const result = await Speaker.find({ user: req.user.id });
+    // Filter speakers name
+    const { keyword } = req.query;
+
+    let condition = { user: req.user.id };
+
+    if (keyword) {
+      condition = { ...condition, name: { $regex: keyword, $options: "i" } };
+    }
+
+    const result = await Speaker.find(condition);
+    // const result = await Speaker.find({ user: req.user.id });
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
