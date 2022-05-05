@@ -1,7 +1,7 @@
 const router = require("express").Router(),
   { getAllEvents, getOneEvent, createEvent, updateEvent, deleteEvent } = require("./controller"),
   { authenticateUser } = require("../../../middlewares/auth"),
-  upload = require("../../../middlewares/multer");
+  upload = require("../../../middlewares/multer_cover");
 
 router.get("/", authenticateUser, getAllEvents);
 router.get("/:id", authenticateUser, getOneEvent);
