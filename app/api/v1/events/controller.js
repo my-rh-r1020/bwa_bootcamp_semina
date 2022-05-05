@@ -1,6 +1,8 @@
 const Event = require("./model"),
   { StatusCodes } = require("http-status-codes"),
-  CustomAPIError = require("../../../errors");
+  CustomAPIError = require("../../../errors"),
+  Category = require("../categories/model"),
+  Speaker = require("../speakers/model");
 
 // Get all data events
 const getAllEvents = async (req, res, next) => {
@@ -51,6 +53,13 @@ const createEvent = async (req, res, next) => {
     let result;
 
     if (!keypoint) throw new CustomAPIError.BadRequestError("Keypoint is required!");
+
+    const checkCategories = await Category.findOne({ _id: category }),
+      checkSpeakers = await Speaker.findOne({ _id: speaker });
+
+    if (!checkCategories) throw new CustomAPIError.BadRequestError(`Category id ${category} is not found!`);
+
+    if (!checkSpeakers) throw new CustomAPIError.BadRequestError(`Speaker id ${speaker} is not found!`);
 
     if (!req.file) {
       result = await Event({ title, price, date, about, venueName, tagline, keypoint, category, speaker, user }).save();
