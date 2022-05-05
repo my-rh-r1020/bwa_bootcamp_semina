@@ -21,7 +21,7 @@ const getAllEvents = async (req, res, next) => {
     // Filter events by speaker
     if (speaker) condition = { ...condition, speaker };
 
-    const result = await Event.find(condition);
+    const result = await Event.find(condition).populate({ path: "category", select: "_id name" }).populate({ path: "speaker", select: "_id name role" });
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
