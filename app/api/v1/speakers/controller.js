@@ -75,7 +75,7 @@ const updateSpeaker = async (req, res, next) => {
       result.name = name;
       result.role = role;
     } else {
-      let currentImage = `${config.rootPath}/public/uploads/${result.avatar}`;
+      let currentImage = `${config.rootPath}/public/uploads/avatar/${result.avatar}`;
 
       if (result.avatar !== "default.png" && fs.existsSync(currentImage)) {
         fs.unlinkSync(currentImage);

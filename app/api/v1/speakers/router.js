@@ -7,6 +7,6 @@ router.get("/", authenticateUser, getAllSpeakers);
 router.get("/:id", authenticateUser, getOneSpeaker);
 router.post("/", authenticateUser, upload.single("avatar"), createSpeaker);
 router.put("/:id", authenticateUser, upload.single("avatar"), updateSpeaker);
-router.delete("/:id", authenticateUser, upload.single("avatar"), deleteSpeaker);
+router.delete("/:id", authenticateUser, deleteSpeaker);
 
 module.exports = router;
