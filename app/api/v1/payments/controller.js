@@ -75,7 +75,7 @@ const updatePayment = async (req, res, next) => {
     } else {
       let currentImage = `${config.rootPath}/public/uploads/payments/${result.imageUrl}`;
 
-      if (result.imageUrl !== "default.png" && fs.existsSync(currentImage)) {
+      if (fs.existsSync(currentImage)) {
         fs.unlinkSync(currentImage);
       }
 
@@ -104,7 +104,7 @@ const deletePayment = async (req, res, next) => {
 
     let currentImage = `${config.rootPath}/public/uploads/payments/${result.imageUrl}`;
 
-    if (result.imageUrl !== "default.png" && fs.existsSync(currentImage)) {
+    if (fs.existsSync(currentImage)) {
       fs.unlinkSync(currentImage);
     }
 
@@ -116,4 +116,24 @@ const deletePayment = async (req, res, next) => {
   }
 };
 
-module.exports = { getAllPayments, getOnePayment, createPayment, updatePayment, deletePayment };
+// Change status of a data payment by id
+const changeStatusPayment = async (req, res, next) => {
+  try {
+    const { id: PaymentId } = req.params,
+      user = req.user.id;
+
+    let result = await Payment.findOne({ _id: PaymentId, user });
+
+    if (!result) throw new CustomAPIError.NotFoundError(`Payment id ${PaymentId} is not found!`);
+
+    result.status = !result.status;
+
+    await result.save();
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { getAllPayments, getOnePayment, createPayment, updatePayment, deletePayment, changeStatusPayment };

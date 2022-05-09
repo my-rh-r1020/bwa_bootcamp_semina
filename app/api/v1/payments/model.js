@@ -13,7 +13,7 @@ const PaymentSchema = new mongoose.Schema(
       required: [true, "Please provide imageUrl"],
     },
     status: {
-      type: String,
+      type: Boolean,
       enum: [true, false],
       default: true,
     },
