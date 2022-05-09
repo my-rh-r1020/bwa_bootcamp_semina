@@ -95,16 +95,16 @@ const updatePayment = async (req, res, next) => {
 // Delete a data payment by id
 const deletePayment = async (req, res, next) => {
   try {
-    const { id: SpeakerId } = req.params,
+    const { id: PaymentId } = req.params,
       user = req.user.id;
 
-    let result = await Speaker.findOne({ _id: SpeakerId, user });
+    let result = await Payment.findOne({ _id: PaymentId, user });
 
-    if (!result) throw new CustomAPIError.NotFoundError(`Speaker id ${SpeakerId} is not found!`);
+    if (!result) throw new CustomAPIError.NotFoundError(`Payment id ${PaymentId} is not found!`);
 
-    let currentImage = `${config.rootPath}/public/uploads/${result.avatar}`;
+    let currentImage = `${config.rootPath}/public/uploads/payments/${result.imageUrl}`;
 
-    if (result.avatar !== "default.png" && fs.existsSync(currentImage)) {
+    if (result.imageUrl !== "default.png" && fs.existsSync(currentImage)) {
       fs.unlinkSync(currentImage);
     }
 
