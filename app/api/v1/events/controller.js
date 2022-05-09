@@ -24,6 +24,10 @@ const getAllEvents = async (req, res, next) => {
     if (speaker) condition = { ...condition, speaker };
 
     const result = await Event.find(condition).populate({ path: "category", select: "_id name" }).populate({ path: "speaker", select: "_id name role" });
+    // Example with alias
+    // const result = await Event.find(condition)
+    //   .populate({ path: "category", select: "_id name" })
+    //   .populate({ path: "speaker", select: { _id: 1, foto: `$avatar`, avatar: 1, name: 1 } });
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
