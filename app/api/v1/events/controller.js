@@ -53,7 +53,7 @@ const getOneEvent = async (req, res, next) => {
 // Create a new data event
 const createEvent = async (req, res, next) => {
   try {
-    const { title, price, date, about, venueName, tagline, keypoint, category, speaker } = req.body,
+    const { title, price, date, about, venueName, tagline, keypoint, status, stock, category, speaker } = req.body,
       user = req.user.id;
 
     let result;
@@ -70,9 +70,9 @@ const createEvent = async (req, res, next) => {
 
     // Create data event
     if (!req.file) {
-      result = await Event({ title, price, date, about, venueName, tagline, keypoint, category, speaker, user }).save();
+      result = await Event({ title, price, date, about, venueName, tagline, keypoint, status, stock, category, speaker, user }).save();
     } else {
-      result = await Event({ title, price, date, about, venueName, tagline, keypoint: JSON.parse(keypoint), category, speaker, cover: req.file.filename, user }).save();
+      result = await Event({ title, price, date, about, venueName, tagline, keypoint: JSON.parse(keypoint), status, stock, category, speaker, cover: req.file.filename, user }).save();
     }
 
     res.status(StatusCodes.CREATED).json({ data: result });
@@ -84,7 +84,7 @@ const createEvent = async (req, res, next) => {
 // Update a data event by id
 const updateEvent = async (req, res, next) => {
   try {
-    const { title, price, date, about, venueName, tagline, keypoint, category, speaker } = req.body,
+    const { title, price, date, about, venueName, tagline, keypoint, status, stock, category, speaker } = req.body,
       { id: EventId } = req.params,
       user = req.user.id;
 
@@ -112,6 +112,8 @@ const updateEvent = async (req, res, next) => {
         (result.venueName = venueName),
         (result.tagline = tagline),
         (result.keypoint = JSON.parse(keypoint)),
+        (result.status = status),
+        (result.stock = stock),
         (result.category = category),
         (result.speaker = speaker),
         (result.user = user);
@@ -129,6 +131,8 @@ const updateEvent = async (req, res, next) => {
         (result.venueName = venueName),
         (result.tagline = tagline),
         (result.keypoint = JSON.parse(keypoint)),
+        (result.status = status),
+        (result.stock = stock),
         (result.category = category),
         (result.speaker = speaker),
         (result.user = user),

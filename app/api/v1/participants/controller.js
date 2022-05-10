@@ -1,4 +1,5 @@
 const Participant = require("./model"),
+  Event = require("../events/model"),
   { StatusCodes } = require("http-status-codes"),
   CustomAPIError = require("../../../errors"),
   { createTokenUser, createJWT } = require("../../../utils");
@@ -47,4 +48,15 @@ const signin = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, signin };
+// Landing Page Participant
+const landingPage = async (req, res, next) => {
+  try {
+    const result = await Event.find({ status: true }).select("title cover price venueName date category");
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { signup, signin, landingPage };
