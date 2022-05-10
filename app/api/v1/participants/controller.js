@@ -19,4 +19,32 @@ const signup = async (req, res, next) => {
   }
 };
 
-module.exports = { signup };
+// Signin Participant
+const signin = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      throw new CustomAPIError.BadRequestError("Please provide your email and password!");
+    }
+
+    // Find participant by email
+    const result = await Participant.findOne({ email: email });
+
+    if (!result) throw new CustomAPIError.UnauthorizedError("Your Email is Invalid");
+
+    // Check if password is correct
+    const isPasswordCorrect = await result.comparePassword(password);
+
+    if (!isPasswordCorrect) throw new CustomAPIError.UnauthorizedError("Your Password is Invalid");
+
+    // Create token
+    const token = createJWT({ payload: createTokenUser(result) });
+
+    res.status(StatusCodes.OK).json({ data: { token } });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { signup, signin };

@@ -1,6 +1,7 @@
 const router = require("express").Router(),
-  { signup } = require("./controller");
+  { signup, signin } = require("./controller");
 
 router.post("/participants/auth/signup", signup);
+router.post("/participants/auth/signin", signin);
 
 module.exports = router;
