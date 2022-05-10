@@ -6,21 +6,14 @@ const Participant = require("./model"),
 // Signup Participant
 const signup = async (req, res, next) => {
   try {
-    const { email, firstname, lastName, password, role } = req.body,
-      result = new Participant({ email, firstname, lastName, password, role });
+    const { email, firstName, lastName, password, role } = req.body,
+      result = new Participant({ email, firstName, lastName, password, role });
 
     await result.save();
 
     delete result._doc.password;
 
     res.status(StatusCodes.CREATED).json({ data: result });
-  } catch (err) {
-    next(err);
-  }
-};
-
-const getAllParticipants = async (req, res, next) => {
-  try {
   } catch (err) {
     next(err);
   }
