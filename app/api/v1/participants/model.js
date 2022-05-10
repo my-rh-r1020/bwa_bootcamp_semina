@@ -49,7 +49,7 @@ ParticipantSchema.path("email").validate(
       throw err;
     }
   },
-  (attr) => `${attr.value} sudah terdaftar`
+  (attr) => `Email ${attr.value} sudah terdaftar`
 );
 
 // ParticipantSchema.path("name").validate(

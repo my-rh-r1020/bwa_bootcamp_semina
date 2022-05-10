@@ -12,7 +12,8 @@ const versionV1 = "/api/v1",
   speakerRouter = require("./app/api/v1/speakers/router"),
   eventRouter = require("./app/api/v1/events/router"),
   paymentRouter = require("./app/api/v1/payments/router"),
-  participantRouter = require("./app/api/v1/participants/router");
+  participantRouter = require("./app/api/v1/participants/router"),
+  transactionRouter = require("./app/api/v1/transactions/router");
 
 // Middleware
 const notFoundMiddleware = require("./app/middlewares/not-found"),
@@ -28,13 +29,17 @@ app.get("/", (req, res) => {
   res.json({ message: "Welcome to api semina" });
 });
 
+// Super Admin Middleware
 app.use(`${versionV1}`, usersRouter);
 app.use(`${versionV1}/auth`, authRouter);
 app.use(`${versionV1}/categories`, categoriesRouter);
 app.use(`${versionV1}/speakers`, speakerRouter);
 app.use(`${versionV1}/events`, eventRouter);
 app.use(`${versionV1}/payments`, paymentRouter);
+
+// Participant Middleware
 app.use(`${versionV1}`, participantRouter);
+app.use(`${versionV1}/transactions`, transactionRouter);
 
 // Middleware
 app.use(notFoundMiddleware);

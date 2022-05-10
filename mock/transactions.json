@@ -39,7 +39,7 @@
       "lastName": "Seraphim",
       "email": "gabrielseraphim@gmail.com"
     },
-    "participant": { "$oid": "623ebebda286ea9f02356619" },
+    "participant": { "$oid": "627a0e27babff014d78e333a" },
     "event": { "$oid": "6273ad8d292b0405f9e36a1b" },
     "historyEvent": {
       "title": "Bootcamp MERN 2022",
