@@ -1,0 +1,67 @@
+[
+  {
+    "_id": { "$oid": "6222882126f7cc72f30ea0df" },
+    "personalDetail": {
+      "firstName": "Rifaldi",
+      "lastName": "Herikson",
+      "email": "rherikson.my@gmail.com",
+      "role": "designer"
+    },
+    "participant": { "$oid": "6279dddb376677a4c61f4453" },
+    "event": { "$oid": "6273ac9a292b0405f9e36a12" },
+    "historyEvent": {
+      "title": "Bootcamp Bootcamp UX/UI Designer",
+      "price": 750000,
+      "date": { "$date": "2022-05-28T00:00:00Z" },
+      "cover": "2022-05-05T10-53-14.645Z-Unikom 1.jpg",
+      "about": "Event untuk bootcamp UX/UI Designer 2022",
+      "venueName": "Zoom Meeting",
+      "tagline": "tagline",
+      "keyPoint": ["keypoint1, keypoint2, keypoint 3"],
+      "category": { "$oid": "6257fb6a8a70fd645688e060" },
+      "speaker": { "$oid": "6273a3023c8fbe6ff331ec13" },
+      "user": { "$oid": "624fef81633b688995f30bb2" }
+    },
+    "historyPayment": {
+      "type": "BNI",
+      "imageUrl": "2022-05-09T14-27-56.320Z-sma nasional bandung.jpg"
+    },
+    "payment": "627924ecdf2088fb50281b03",
+
+    "createdAt": { "$date": "2022-03-04T21:44:01.981Z" },
+    "updatedAt": { "$date": "2022-03-04T21:44:01.981Z" },
+    "__v": 0
+  },
+  {
+    "_id": { "$oid": "6222882126f7cc72f30ea0dg" },
+    "personalDetail": {
+      "firstName": "Gabriel",
+      "lastName": "Seraphim",
+      "email": "gabrielseraphim@gmail.com"
+    },
+    "participant": { "$oid": "623ebebda286ea9f02356619" },
+    "event": { "$oid": "6273ad8d292b0405f9e36a1b" },
+    "historyEvent": {
+      "title": "Bootcamp MERN 2022",
+      "price": 730000,
+      "date": { "$date": "2022-05-27T00:00:00Z" },
+      "cover": "2022-05-06T15-06-23.072Z-Background Family 1.png",
+      "about": "Event untuk bootcamp MERN Stack 2022",
+      "venueName": "Zoom Meeting",
+      "tagline": "tagline",
+      "keypoint": ["keypoint 1", "keypoint 2", "keypoint 3", "keypoint 4"],
+      "category": { "$oid": "625a9e302fb2c8e8f47ab732" },
+      "speaker": { "$oid": "6273a3533c8fbe6ff331ec1a" },
+      "user": { "$oid": "624fef81633b688995f30bb2" }
+    },
+    "historyPayment": {
+      "type": "BCA",
+      "imageUrl": "2022-05-09T14-47-54.870Z-Front Framework JS.png"
+    },
+    "payment": "6279299acd319118e51c8c84",
+
+    "createdAt": { "$date": "2022-03-04T21:44:01.981Z" },
+    "updatedAt": { "$date": "2022-03-04T21:44:01.981Z" },
+    "__v": 0
+  }
+]
