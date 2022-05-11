@@ -51,7 +51,7 @@ const signin = async (req, res, next) => {
 // Landing Page Participant
 const landingPage = async (req, res, next) => {
   try {
-    const result = await Event.find({ status: true }).select("title cover price venueName date category");
+    const result = await Event.find({ status: true }).select("_id title cover price venueName date category").populate({ path: "category", select: "_id name" }).limit(4);
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
@@ -59,4 +59,32 @@ const landingPage = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, signin, landingPage };
+// Detail Page Participant
+const detailPage = async (req, res, next) => {
+  try {
+    const { id: detailPageId } = req.params;
+
+    const result = await Event.findOne({ _id: detailPageId, status: true }).select("_id cover title about keypoint tagline price venueName date speaker").populate({ path: "speaker", select: "_id name avatar role" });
+
+    if (!result) throw new CustomAPIError.NotFoundError(`Event with id ${detailPageId} not found`);
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Checkout Page Participant
+const checkoutPage = async (req, res, next) => {
+  try {
+    const { id: checkoutPageId } = req.params;
+
+    const result = await Event.findOne({ _id: checkoutPageId }).select("_id cover title tagline date venueName price");
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { signup, signin, landingPage, detailPage, checkoutPage };
