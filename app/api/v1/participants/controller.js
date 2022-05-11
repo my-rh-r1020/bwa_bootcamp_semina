@@ -1,5 +1,6 @@
 const Participant = require("./model"),
   Event = require("../events/model"),
+  Payment = require("../payments/model"),
   { StatusCodes } = require("http-status-codes"),
   CustomAPIError = require("../../../errors"),
   { createTokenUser, createJWT } = require("../../../utils");
@@ -77,9 +78,30 @@ const detailPage = async (req, res, next) => {
 // Checkout Page Participant
 const checkoutPage = async (req, res, next) => {
   try {
-    const { id: checkoutPageId } = req.params;
+    const { event: EventId, personalDetail, payment: PaymentId } = req.body;
 
-    const result = await Event.findOne({ _id: checkoutPageId }).select("_id cover title tagline date venueName price");
+    // Find event by id
+    const checkingEvent = await Event.findOne({ _id: EventId });
+
+    if (!checkingEvent) throw new CustomAPIError.NotFoundError(`Event with id ${EventId} not found`);
+
+    const historyEvent = {
+      title: checkingEvent.title,
+      price: checkingEvent.price,
+      date: checkingEvent.date,
+      cover: checkingEvent.cover,
+      about: checkingEvent.about,
+      venueName: checkingEvent.venueName,
+      tagline: checkingEvent.tagline,
+      keypoint: checkingEvent.keypoint,
+      category: checkingEvent.category,
+      speaker: checkingEvent.speaker,
+    };
+
+    // Find payment by id
+    const chekingPayment = await Payment.findOne({ _id: PaymentId });
+
+    if (!chekingPayment) throw new CustomAPIError.NotFoundError(`Payment with id ${PaymentId} not found`);
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
