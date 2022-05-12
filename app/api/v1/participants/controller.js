@@ -1,6 +1,7 @@
 const Participant = require("./model"),
   Event = require("../events/model"),
   Payment = require("../payments/model"),
+  Transaction = require("../transactions/model"),
   { StatusCodes } = require("http-status-codes"),
   CustomAPIError = require("../../../errors"),
   { createTokenUser, createJWT } = require("../../../utils");
@@ -85,6 +86,14 @@ const checkoutPage = async (req, res, next) => {
 
     if (!checkingEvent) throw new CustomAPIError.NotFoundError(`Event with id ${EventId} not found`);
 
+    // Check and update stock ticket
+    if (checkingEvent.stock === 0) {
+      throw new CustomAPIError.BadRequestError("Sorry, this event is sold out");
+    } else {
+      checkingEvent.stock = checkingEvent.stock -= 1;
+      await checkingEvent.save();
+    }
+
     const historyEvent = {
       title: checkingEvent.title,
       price: checkingEvent.price,
@@ -99,11 +108,28 @@ const checkoutPage = async (req, res, next) => {
     };
 
     // Find payment by id
-    const chekingPayment = await Payment.findOne({ _id: PaymentId });
+    const checkingPayment = await Payment.findOne({ _id: PaymentId });
 
-    if (!chekingPayment) throw new CustomAPIError.NotFoundError(`Payment with id ${PaymentId} not found`);
+    if (!checkingPayment) throw new CustomAPIError.NotFoundError(`Payment with id ${PaymentId} not found`);
 
-    res.status(StatusCodes.OK).json({ data: result });
+    const historyPayment = {
+      type: checkingPayment.type,
+      imageUrl: checkingPayment.imageUrl,
+    };
+
+    // Checkout payment
+    const result = new Transaction({
+      personalDetail: personalDetail,
+      event: EventId,
+      historyEvent: historyEvent,
+      payment: PaymentId,
+      historyPayment: historyPayment,
+      participant: req.user.id,
+    });
+
+    await result.save();
+
+    res.status(StatusCodes.CREATED).json({ data: result });
   } catch (err) {
     next(err);
   }
