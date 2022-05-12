@@ -1,7 +1,7 @@
-// Package App
 const express = require("express"),
   app = express(),
   path = require("path"),
+  // Package App
   cookieParser = require("cookie-parser"),
   logger = require("morgan"),
   cors = require("cors");
