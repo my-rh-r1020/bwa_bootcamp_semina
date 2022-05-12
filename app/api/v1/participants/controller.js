@@ -135,4 +135,17 @@ const checkoutPage = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, signin, landingPage, detailPage, checkoutPage };
+// Dashboard Page Participant
+const dashboardPage = async (req, res, next) => {
+  try {
+    const result = await Transaction.find({ participant: req.user.id }).select("_id event historyEvent historyPayment").populate({ path: "event", select: "_id title cover price venueName date category" });
+
+    if (!result) throw new CustomAPIError.NotFoundError(`ID ${req.user.id} don't have any transaction yet`);
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { signup, signin, landingPage, detailPage, checkoutPage, dashboardPage };

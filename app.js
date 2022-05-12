@@ -1,9 +1,12 @@
+// Package App
 const express = require("express"),
   app = express(),
   path = require("path"),
   cookieParser = require("cookie-parser"),
-  logger = require("morgan");
+  logger = require("morgan"),
+  cors = require("cors");
 
+// API Routes
 const versionV1 = "/api/v1",
   // Router App
   usersRouter = require("./app/api/v1/users/router"),
@@ -19,6 +22,7 @@ const versionV1 = "/api/v1",
 const notFoundMiddleware = require("./app/middlewares/not-found"),
   handlerError = require("./app/middlewares/handler-error");
 
+app.use(cors());
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
