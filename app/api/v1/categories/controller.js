@@ -21,7 +21,7 @@ const createCategory = async (req, res, next) => {
 
     const check = await Category.findOne({ user, name });
 
-    if (check) throw new CustomAPIError.BadRequestError("Duplicate name category!");
+    if (check) throw new CustomAPIError.BadRequestError("Category name is already used");
 
     const result = await Category.create({ name, user });
 
@@ -54,11 +54,11 @@ const updateCategory = async (req, res, next) => {
 
     const check = await Category.findOne({ name, _id: { $ne: categoryId } });
 
-    if (check) throw new CustomAPIError.BadRequestError("Duplicate name category!");
+    if (check) throw new CustomAPIError.BadRequestError("Category name is already used");
 
     const result = await Category.findOneAndUpdate({ _id: categoryId }, { name, user: req.user.id }, { new: true, runValidators: true });
 
-    if (!result) throw new CustomAPIError.NotFoundError(`Data not found for id ${categoryId}`);
+    if (!result) throw new CustomAPIError.NotFoundError(`Categories id ${categoryId} is not found!`);
 
     res.status(StatusCodes.OK).json({ data: result });
   } catch (err) {
@@ -74,7 +74,7 @@ const deleteCategory = async (req, res, next) => {
     // const result = await Category.findOne({ _id: categoryId });
     const result = await Category.findOneAndDelete({ _id: categoryId });
 
-    if (!result) throw new CustomAPIError.NotFoundError(`Data not found for id ${categoryId}`);
+    if (!result) throw new CustomAPIError.NotFoundError(`Categories id ${categoryId} is not found!`);
 
     // await result.remove();
     res.status(StatusCodes.OK).json({ data: result });
