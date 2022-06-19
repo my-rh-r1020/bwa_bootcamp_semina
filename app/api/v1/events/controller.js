@@ -40,7 +40,7 @@ const getOneEvent = async (req, res, next) => {
   try {
     const { id: EventId } = req.params;
 
-    const result = await Event.findOne({ _id: EventId, user: req.user.id });
+    const result = await Event.findOne({ _id: EventId, user: req.user.id }).populate({ path: "category", select: "_id name" }).populate({ path: "speaker", select: "_id name role" });
 
     if (!result) throw new CustomAPIError.NotFoundError(`Event id ${EventId} is not found!`);
 
