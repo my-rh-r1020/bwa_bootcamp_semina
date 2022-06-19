@@ -104,7 +104,7 @@ const deleteSpeaker = async (req, res, next) => {
 
     if (!result) throw new CustomAPIError.NotFoundError(`Speaker id ${SpeakerId} is not found!`);
 
-    let currentImage = `${config.rootPath}/public/uploads/${result.avatar}`;
+    let currentImage = `${config.rootPath}/public/uploads/avatar/${result.avatar}`;
 
     if (result.avatar !== "default.png" && fs.existsSync(currentImage)) {
       fs.unlinkSync(currentImage);
