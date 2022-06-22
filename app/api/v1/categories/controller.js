@@ -5,9 +5,19 @@ const Category = require("./model"),
 // Get all data categories
 const getAllCategory = async (req, res, next) => {
   try {
-    const result = await Category.find({ user: req.user.id });
+    const { limit = 10, page = 1 } = req.query;
+    let condition = { user: req.user.id };
 
-    res.status(StatusCodes.OK).json({ data: result });
+    // Pagination Categories
+    const result = await Category.find(condition)
+      .limit(limit)
+      // Jumlah data yang akan ditampilkan
+      .skip(limit * (page - 1));
+
+    // Document counting
+    const count = await Category.countDocuments(condition);
+
+    res.status(StatusCodes.OK).json({ data: result, pages: Math.ceil(count / limit), total: count });
   } catch (err) {
     next(err);
   }

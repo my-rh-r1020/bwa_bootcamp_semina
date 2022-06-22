@@ -40,6 +40,7 @@ const getAllTransactions = async (req, res, next) => {
       // Jumlah data yang akan ditampilkan
       .skip(limit * (page - 1));
 
+    // Document counting
     const count = await Transaction.countDocuments(condition);
 
     res.status(200).json({ data: result, pages: Math.ceil(count / limit), total: count });
