@@ -66,7 +66,7 @@ const detailPage = async (req, res, next) => {
   try {
     const { id: detailPageId } = req.params;
 
-    const result = await Event.findOne({ _id: detailPageId, status: true }).select("_id cover title about keypoint tagline price venueName date speaker").populate({ path: "speaker", select: "_id name avatar role" });
+    const result = await Event.findOne({ _id: detailPageId, status: true }).select("_id cover title about keypoint tagline price venueName date speaker stock").populate({ path: "speaker", select: "_id name avatar role" });
 
     if (!result) throw new CustomAPIError.NotFoundError(`Event with id ${detailPageId} not found`);
 
