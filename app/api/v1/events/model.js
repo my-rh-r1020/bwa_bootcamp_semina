@@ -6,7 +6,7 @@ const EventSchema = new mongoose.Schema(
       type: String,
       required: [true, "Please provide title!"],
       minlength: 3,
-      maxlength: 50,
+      maxlength: 200,
     },
     price: {
       type: Number,
