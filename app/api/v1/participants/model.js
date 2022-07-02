@@ -27,6 +27,7 @@ const ParticipantSchema = new mongoose.Schema(
     },
     role: {
       type: String,
+      required: [true, "Please provide your role"],
     },
   },
   { timestamps: true }
