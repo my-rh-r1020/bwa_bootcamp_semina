@@ -148,4 +148,17 @@ const dashboardPage = async (req, res, next) => {
   }
 };
 
-module.exports = { signup, signin, landingPage, detailPage, checkoutPage, dashboardPage };
+// Payments Participant
+const payments = async (req, res, next) => {
+  try {
+    const result = await Payment.find({ status: true });
+
+    if (!result) throw new CustomAPIError.NotFoundError("Payment Data Not Found");
+
+    res.status(StatusCodes.OK).json({ data: result });
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { signup, signin, landingPage, detailPage, checkoutPage, dashboardPage, payments };
